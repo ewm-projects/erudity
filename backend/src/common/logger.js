@@ -5,6 +5,8 @@ import "winston-daily-rotate-file"
 import { env } from "./env.js";
 import Utility from "./utils.js";
 
+// src: https://levelup.gitconnected.com/better-logs-for-expressjs-using-winston-and-morgan-with-typescript-1c31c1ab9342
+
 // Winston default log levels
 // src: https://github.com/winstonjs/winston#logging-levels
 const levels = {
