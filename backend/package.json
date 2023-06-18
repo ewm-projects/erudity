@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon src/index.js",
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --ignore-path ../.gitignore --fix ./src",
@@ -17,6 +19,11 @@
     "eslint": "^8.43.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.8.0",
+    "nodemon": "^2.0.22",
     "prettier": "^2.8.8"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1"
   }
 }
