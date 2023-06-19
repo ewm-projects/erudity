@@ -10,7 +10,9 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://backend:3001',
+        // only works with docker
+        // TODO: change so localhost url is used if not running with docker
+        target: 'http://backend:3001', 
         changeOrigin: true,
         secure: false,
       },

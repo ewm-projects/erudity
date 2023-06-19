@@ -1,0 +1,13 @@
+{
+  "name": "erudity",
+  "version": "1.0.0",
+  "description": "Web application for cataloging, reviewing, sharing, and tracking learning resources",
+  "main": "index.js",
+  "scripts": {
+    "docker:rebuild": "docker compose up -d --build",
+    "docker:start": "docker compose up -d",
+    "docker:stop": "docker compose down -v"
+  },
+  "author": "",
+  "license": "ISC"
+}
