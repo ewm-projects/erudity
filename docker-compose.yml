@@ -1,0 +1,63 @@
+services:
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    image: erudity-frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/usr/app/frontend
+      - /usr/app/frontend/node_modules
+    networks:
+      - erudity-network
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    image: erudity-backend
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/usr/app/backend
+      - /usr/app/backend/node_modules
+    networks:
+      - erudity-network
+    depends_on:
+      - db
+
+  db-viewer:
+    image: mongo-express
+    container_name: erudity-db-viewer
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://erudity-db:27017
+      - ME_CONFIG_BASICAUTH_USERNAME=
+      - ME_CONFIG_BASICAUTH_PASSWORD=
+    networks:
+      - erudity-network
+    depends_on:
+      - db
+    ports:
+      - 8081:8081
+
+  db:
+    image: mongo
+    container_name: 'erudity-db'
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - '27018:27017'
+    volumes:
+      - erudity-db:/data/db
+    networks:
+      - erudity-network
+
+volumes:
+  erudity-db:
+    driver: local
+
+networks:
+  erudity-network:
+    driver: bridge
