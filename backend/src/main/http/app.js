@@ -6,44 +6,48 @@ import middlewares from "./middle.js";
 import router from "./router.js";
 
 const create = () => {
-    const app = express()
+  const app = express();
 
-    app.use(express.json())
-    app.use(middlewares.httpLogger())
-    app.use(router)
-    app.use(middlewares.errorHandler)
-    app.use(middlewares.unknownEndpoint)
-    
-    return app
-}
+  app.use(express.json());
+  app.use(middlewares.httpLogger());
+  app.use(router);
+  app.use(middlewares.errorHandler);
+  app.use(middlewares.unknownEndpoint);
+
+  return app;
+};
 
 const start = () => {
-    const app = create()
+  const app = create();
 
-    const getUrl = (server) => {
-        const address = server.address()
-        const port = address.port !== 80 ? `:${address.port}` : "";
-        let host = "";
+  const getUrl = (server) => {
+    const address = server.address();
+    const port = address.port !== 80 ? `:${address.port}` : "";
+    let host = "";
 
-        if (address.family === "IPv4" && address.address !== "0.0.0.0") {
-            host = address.address;
-          } else if (address.family === "IPv6" && address.address !== "::") {
-            host = address.address;
-          } else {
-            host = "localhost";
-          }
-        
-          return `http://${host}${port}/`;
+    if (address.family === "IPv4" && address.address !== "0.0.0.0") {
+      host = address.address;
+    } else if (address.family === "IPv6" && address.address !== "::") {
+      host = address.address;
+    } else {
+      host = "localhost";
     }
 
-    return new Promise((resolve, reject) => {
-        const server = app.listen(env.BACKEND_PORT);
+    return `http://${host}${port}/`;
+  };
 
-        server.once("listening", () => resolve(`Server running on ${getUrl(server)}`))
-        server.once("error", (err) => reject(new Error(`Server failed to start: ${err.message}`)));
-    })
-}
+  return new Promise((resolve, reject) => {
+    const server = app.listen(env.BACKEND_PORT);
 
-const Express = {create, start}
+    server.once("listening", () =>
+      resolve(`Server running on ${getUrl(server)}`)
+    );
+    server.once("error", (err) =>
+      reject(new Error(`Server failed to start: ${err.message}`))
+    );
+  });
+};
 
-export default Express
+const Express = { create, start };
+
+export default Express;

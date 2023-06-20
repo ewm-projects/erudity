@@ -16,4 +16,4 @@ const status = async () => await mongoose.connection.db.stats();
 
 const Conn = { start, stop, status };
 
-export default Conn
+export default Conn;

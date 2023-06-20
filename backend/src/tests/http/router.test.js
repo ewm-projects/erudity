@@ -1,7 +1,7 @@
 import supertest from "supertest";
 
-import Express from "../../main/http/app.js"
-import Conn from "../../main/data/conn.js"
+import Express from "../../main/http/app.js";
+import Conn from "../../main/data/conn.js";
 
 const api = supertest(Express.create());
 

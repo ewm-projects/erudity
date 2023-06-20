@@ -1,5 +1,5 @@
 import path, { sep } from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const getDirPath = (dirName) => {
   // src: https://codingbeautydev.com/blog/javascript-dirname-is-not-defined-in-es-module-scope/
@@ -19,4 +19,4 @@ const Utility = {
   getDirPath,
 };
 
-export default Utility
+export default Utility;
