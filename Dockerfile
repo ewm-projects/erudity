@@ -28,7 +28,7 @@ RUN npm prune --production
 # Setup Express & Nginx
 ############################################################
 # https://medium.com/geekculture/how-to-install-a-specific-node-js-version-in-an-alpine-docker-image-3edc1c2c64be
-FROM node:bullseye-slim as node
+FROM node:18-alpine3.17 as node
 FROM nginx:stable-alpine
 
 # Copy binaries from official Node image
@@ -49,19 +49,19 @@ ENV PATH /usr/app/node_modules/.bin:$PATH
 COPY --from=build-react /usr/app/frontend/dist /usr/share/nginx/html
 COPY ./proxy/default.conf /etc/nginx/conf.d/default.conf
 
+# Install PM2, see: https://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/
+# Todo: look into proper PM2 setup later
+RUN npm install pm2 -g
+
 # install and cache app dependencies
 COPY ./backend/package.json .
 COPY ./backend/package-lock.json .
 RUN npm ci
 
-COPY ./backend/src .
+COPY ./backend .
 
-EXPOSE 3001
 ENV NODE_ENV production
 
-RUN adduser --disabled-password myuser
-USER myuser
-
-CMD npm run start  && \
+CMD pm2 start src/main/index.js && \
       sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && \
       nginx -g 'daemon off;'
