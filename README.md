@@ -12,7 +12,7 @@
 
 ## About
 **Description**
-- Web app for facilitating self-learning that features a catalog of resources, learning tracking system, etc to make the learning process easier 
+- Web app that features a learning resources catalog, progress tracking system, and more to make the learning process easier 
 - See [Project Vision](https://github.com/ewm-projects/ewm-docs/blob/main/v1/vision.md) for more details
 
 **Purpose**
