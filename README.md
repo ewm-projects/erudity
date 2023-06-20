@@ -25,16 +25,13 @@
 |Id | Functional features |
 |:---|:---|
 | 1 | Signup & Signin |
-| 2 | User roles |
-| 3 | Resource submission |
-| 4 | Resource Approval |
-| 5 | Resource Sort & Filter |
-| 6 | Resource ratings |
-| 7 | Resource comments |
-| 8 | Reporting resource |
-| 9 | User password reset |
-| 10 | Admin dashboard |
-| 11 | User profile |
+| 2 | Resource Display |
+| 3 | Resource interaction |
+| 4 | Resource submission |
+| 5 | Reporting resources |
+| 6 | User password reset |
+| 7 | Admin dashboard |
+| 8 | User profile |
 
 ## Tech Stack
 **Backend**
