@@ -8,10 +8,10 @@
     "dev": "cross-env NODE_ENV=dev nodemon src/main/index.js",
     "start": "cross-env NODE_ENV=production node src/main/index.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test jest --runInBand",
-    "lint": "eslint --ignore-path ../.gitignore --fix ./src",
-    "lint:check": "eslint --ignore-path ../.gitignore ./src",
-    "format": "prettier --ignore-path ../.gitignore --write ./src",
-    "format:check": "prettier --ignore-path ../.gitignore --check ./src"
+    "lint": "eslint --ignore-path .gitignore --fix ./src",
+    "lint:check": "eslint --ignore-path .gitignore ./src",
+    "format": "prettier --ignore-path .gitignore --write ./src",
+    "format:check": "prettier --ignore-path .gitignore --check ./src"
   },
   "author": "",
   "license": "ISC",

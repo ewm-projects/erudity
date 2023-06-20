@@ -1,0 +1,75 @@
+name: Heroku CICD
+
+on:
+    push:
+        branches: ["main"]
+
+jobs:
+    backend-checks:
+        name: Backend CI
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Node 18
+              uses: actions/setup-node@v3
+              env: 
+                TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+              with:
+                node-version: 18
+            - run: |
+                cd backend
+                npm ci
+                npm run lint:check
+                npm run format:check
+                npm run test
+
+    frontend-checks:
+        name: Frontend CI
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Node 18
+              uses: actions/setup-node@v3
+              with:
+                node-version: 18
+            - run: |
+                cd frontend
+                npm ci
+                npm run lint:check
+                npm run format:check
+                npm run test
+
+    build-image:
+        name: Build Production Docker image
+        runs-on: ubuntu-latest
+        needs: [backend-checks, frontend-checks]
+        env: 
+            HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                ref: main
+            - name: Build images
+              run: |
+                docker build \
+                --cache-from ${{ env.IMAGE }}:latest \
+                --tag ${{ env.HEROKU_REGISTRY_IMAGE }}:latest \
+                --file Dockerfile.deploy \
+                --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
+                "."
+            - name: Log in to the Heroku Container Registry
+              run: docker login -u _ -p ${HEROKU_AUTH_TOKEN} registry.heroku.com
+              env:
+                HEROKU_AUTH_TOKEN: ${{ secrets.HEROKU_AUTH_TOKEN }}
+            - name: Push to the registry
+              run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
+            - name: Set environment variables
+              run: |
+                echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
+                echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
+                echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME }}" >> $GITHUB_ENV
+            - name: Release
+              run: |
+                chmod +x ./release.sh
+                ./release.sh
