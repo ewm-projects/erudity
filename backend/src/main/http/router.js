@@ -1,5 +1,6 @@
 import express from "express";
 import Conn from "../data/conn.js";
+import { PingRouter } from "../modules/ping/ping.controller.js";
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -15,5 +16,7 @@ router.get("/api/health", async (req, res) => {
 
   res.status(200).json(health);
 });
+
+router.use("/api/ping", PingRouter);
 
 export default router;
