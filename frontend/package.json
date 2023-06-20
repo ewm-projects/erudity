@@ -7,10 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ignore-path ../.gitignore --fix src --ext js,jsx",
-    "lint:check": "eslint --ignore-path ../.gitignore src --ext js,jsx",
-    "format": "prettier --ignore-path ../.gitignore --write 'src/**/*.{js,jsx}'",
-    "format:check": "prettier --ignore-path ../.gitignore --check 'src/**/*.{js,jsx}'",
+    "lint": "eslint --ignore-path .gitignore --fix src --ext js,jsx",
+    "lint:check": "eslint --ignore-path .gitignore src --ext js,jsx",
+    "format": "prettier --ignore-path .gitignore --write 'src/**/*.{js,jsx}'",
+    "format:check": "prettier --ignore-path .gitignore --check 'src/**/*.{js,jsx}'",
     "test": "vitest run"
   },
   "dependencies": {
