@@ -5,7 +5,7 @@ import Logger from "./common/logger.js";
 
 const main = async () => {
     Logger.info('Hello world!');
-    Logger.info("Port", env.PORT)
+    Logger.info("Port", env.BACKEND_PORT)
     Logger.info(`NODE ENV ${env.NODE_ENV}`)
     
     try {

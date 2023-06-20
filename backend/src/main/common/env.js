@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
-const PORT = process.env.PORT ?? "3001";
+const BACKEND_PORT = process.env.PORT ?? "3001";
 const getMongoUri = () => {
     switch (NODE_ENV) {
       case "dev":
@@ -15,4 +15,4 @@ const getMongoUri = () => {
     }
   };
 
-export const env = { NODE_ENV, PORT, getMongoUri };
+export const env = { NODE_ENV, BACKEND_PORT, getMongoUri };

@@ -37,7 +37,7 @@ const start = () => {
     }
 
     return new Promise((resolve, reject) => {
-        const server = app.listen(env.PORT);
+        const server = app.listen(env.BACKEND_PORT);
 
         server.once("listening", () => resolve(`Server running on ${getUrl(server)}`))
         server.once("error", (err) => reject(new Error(`Server failed to start: ${err.message}`)));
