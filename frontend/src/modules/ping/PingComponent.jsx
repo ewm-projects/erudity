@@ -1,25 +1,11 @@
-import { useState, useEffect } from "react";
-import { PingService } from "./PingService";
-
-const PingComponent = () => {
-  const [pong, setPong] = useState("");
-
-  useEffect(() => {
-    const fetchPong = async () => {
-      const res = await PingService.get();
-      setPong(res.data.message);
-    };
-
-    fetchPong();
-  }, []);
-
+const PingComponent = ({ message }) => {
   return (
     <div>
       <div className="chat chat-start">
-        <div className="chat-bubble">Ping!</div>
+        <div className="chat-bubble">Pong!</div>
       </div>
       <div className="chat chat-end">
-        <div className="chat-bubble">{pong}</div>
+        <div className="chat-bubble chat-bubble-accent">{message}</div>
       </div>
     </div>
   );
