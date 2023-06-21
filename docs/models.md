@@ -15,7 +15,8 @@
   totalRatings: Number,
   type: String,
   hours: Number,
-  pages: Number
+  pages: Number,
+  tags: String[]
 }
 ```
 
