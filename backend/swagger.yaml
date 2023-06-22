@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Erudity
+  description: |-
+    API documentation for Erudity API
+  version: 1.0.0
+tags:
+  - name: resources
+    # description: API operations for many resources
+  - name: resource
+    # description: API operations for one resource
+paths:
+  /resources:
+    get:
+      tags: 
+        - resources
+      summary: Get list of resources
+      description: View all resources
+      responses:
+        '200':    # status code
+          description: A JSON array of resources
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Resource'
+    post:
+      tags:
+        - resources
+      summary: Create new resource
+      description: Adds new resource
+      requestBody:
+        description: Resource DTO
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceDTO'
+        required: true
+      responses:
+        '201':
+          description: Successful resource creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid resource data
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Invalid resource data
+  /resources/{resourceId}:
+    get:
+      tags: 
+        - resource
+      summary: Get data for specific resource
+      description: View single resource
+      parameters:
+        - name: resourceId
+          in: path
+          description: ObjectID of resource
+          required: true
+          schema:
+            type: string
+            format: ObjectID
+      responses:
+        '200':
+          description: Single resource returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+    put:
+      tags:
+        - resource
+      summary: Update single resource
+      description: Update single resource
+      parameters:
+        - name: resourceId
+          in: path
+          description: ObjectID of resource
+          required: true
+          schema:
+            type: string
+            format: ObjectID
+      responses:
+        '200':
+          description: Single resource updated & returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Failed resource creation or update
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Invalid Id or data'
+    delete:
+      tags: 
+        - resource
+      summary: Delete single resource
+      description: Delete single resource
+      parameters:
+        - name: resourceId
+          in: path
+          description: ObjectID of resource
+          required: true
+          schema:
+            type: string
+            format: ObjectID
+      responses:
+        '204':
+          description: Single resource sucessfully deleted
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Resource not found'
+components:
+  schemas:
+    ResourceDTO:
+      type: object
+      properties:
+        creators:
+          type: array
+          items:
+            type: string
+          example: [Maximilian Schwarzmüller, Manuel Lorenz]
+        description:
+          type: string
+          example: "Learn CSS for the first time or brush up your CSS skills and dive in even deeper."
+        platform:
+          type: array
+          items:
+            type: string
+            example: [Udemy, Academind]
+        createdAt:
+          type: string
+          format: date-time
+          example: null
+        updatedAt:
+          type: string
+          format: date
+          example: '2023-01-05'
+        price:
+          type: number
+          example: "9.99"
+        difficulty:
+          type: string
+          example: "Beginner"
+        avgRating:
+          type: number
+          example: "3.33"
+        totalRatings:
+          type: number
+          example: "25"
+        format:
+          type: string
+          example: video
+        hours:
+          type: number
+          example: 22.5
+        tags:
+          type: array
+          items:
+            type: string
+            example: [CSS, HTML]
+        subject:
+          type: string
+          example: programming
+    Resource:
+      allOf:
+        - $ref: '#/components/schemas/ResourceDTO'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "507f1f77bcf86cd799439011"

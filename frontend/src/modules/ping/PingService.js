@@ -11,6 +11,16 @@ const get = async () => {
   }
 };
 
+const add = (ping) => {
+  try {
+    return axios.post(baseUrl, ping);
+  } catch (e) {
+    console.error("Error posting ping");
+    throw e;
+  }
+};
+
 export const PingService = {
   get,
+  add,
 };
