@@ -17,7 +17,7 @@
   hours: Number,
   pages: Number,
   tags: String[],
-  subject: String[],
+  subject: String,
 }
 ```
 
