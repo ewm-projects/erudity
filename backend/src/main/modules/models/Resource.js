@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export default mongoose.models.resource ||
   mongoose.model(
     new mongoose.Schema({
-      contributors: {
+      creators: {
         type: [String],
         validate: [
           (array) => array.length > 0,
@@ -11,7 +11,9 @@ export default mongoose.models.resource ||
         ],
         required: true,
       },
+      description: String,
       platform: String,
+      format: String,
       createdAt: Date,
       updatedAt: Date,
       dateAdded: {
@@ -21,9 +23,9 @@ export default mongoose.models.resource ||
       priceUSD: Number,
       difficulty: String,
       avgRating: Number,
-      totalRatins: Number,
-      type: String,
+      totalRatings: Number,
       hours: Number,
       pages: Number,
+      tags: [String],
     })
   );
