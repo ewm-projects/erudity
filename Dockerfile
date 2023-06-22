@@ -39,7 +39,7 @@ COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
 # set working directory
-WORKDIR /usr/app
+WORKDIR /usr/app/backend
 
 # add `/usr/src/app/node_modules/.bin` to $PATH
 # see: https://stackoverflow.com/a/65407744
