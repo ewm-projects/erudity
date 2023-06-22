@@ -13,11 +13,11 @@
   difficulty: String,
   avgRating: Number,
   totalRatings: Number,
-  type: String,
+  format: String,
   hours: Number,
   pages: Number,
   tags: String[],
-  subject: String[],
+  subject: String,
 }
 ```
 
