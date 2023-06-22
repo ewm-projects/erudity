@@ -1,6 +1,11 @@
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yaml";
+import path from "path";
+import fs from "fs";
 import Conn from "../data/conn.js";
 import { PingRouter } from "../modules/ping/ping.controller.js";
+import Utility from "../common/utils.js";
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -18,5 +23,14 @@ router.get("/api/health", async (req, res) => {
 });
 
 router.use("/api/ping", PingRouter);
+
+const setupSwagger = () => {
+  const docPath = path.join(Utility.getDirPath("backend"), "swagger.yaml");
+  const doc = fs.readFileSync(docPath, "utf8");
+  return YAML.parse(doc);
+};
+
+router.use("/api/docs", swaggerUi.serve);
+router.get("/api/docs", swaggerUi.setup(setupSwagger()));
 
 export default router;
