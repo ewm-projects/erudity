@@ -12,6 +12,7 @@ export default mongoose.models.resource ||
         required: true,
       },
       description: String,
+      subject: String,
       platform: String,
       format: String,
       createdAt: Date,
