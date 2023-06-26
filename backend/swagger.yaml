@@ -108,15 +108,34 @@ paths:
         - resources
       summary: Get list of resources
       description: View all resources
+      # src: https://stackoverflow.com/a/55135302
+      parameters:
+        - name: page
+          in: query
+          description: Page (subset) of resources to return
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Number of resources to include in a page
+          required: false
+          schema:
+            type: integer
       responses:
         '200':    # status code
-          description: A JSON array of resources
+          description: A JSON array of paginated resources
           content:
             application/json:
-              schema: 
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Resource'
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Paginated'
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Resource'
     post:
       tags:
         - resources
