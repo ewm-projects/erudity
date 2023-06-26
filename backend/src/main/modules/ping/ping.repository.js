@@ -1,7 +1,10 @@
 import { PingDao } from "./ping.dao.js";
 
 const add = (dto) => PingDao.create(dto);
+const count = () => PingDao.estimatedDocumentCount({}).exec();
 const addAll = (dtos) => PingDao.insertMany(dtos);
+const getSome = (limit, skip) =>
+  PingDao.find({}).limit(limit).skip(skip).exec();
 const getAll = () => PingDao.find({}).exec();
 const getById = (id) => PingDao.findById(id).exec();
 const removeAll = () => PingDao.deleteMany({}).exec();
@@ -11,8 +14,10 @@ const updateById = (id, dto) =>
 
 export const PingRepository = {
   add,
+  count,
   addAll,
   getAll,
+  getSome,
   getById,
   removeAll,
   removeById,

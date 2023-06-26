@@ -4,9 +4,27 @@ import { PingService } from "./ping.service.js";
 const router = express.Router();
 
 // return all ping messsages
+// router.get("/", async (req, res) => {
+//   const pings = await PingService.getAll();
+//   res.status(200).json(pings);
+// });
+
+// return paginated response
 router.get("/", async (req, res) => {
-  const pings = await PingService.getAll();
-  res.status(200).json(pings);
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const skip = (page - 1) * limit; // page - 1 to prevent skipping items on first page
+  const pings = await PingService.getSome(limit, skip);
+  const total = await PingService.count();
+  const pages = Math.ceil(total / limit);
+
+  const payload = {
+    total,
+    pages,
+    pings,
+  };
+
+  res.status(200).json(payload);
 });
 
 // create new ping message

@@ -6,6 +6,14 @@ const add = (dto) => {
   return PingRepository.add(dto);
 };
 
+const count = async () => {
+  return await PingRepository.count();
+};
+
+const getSome = async (limit, skip) => {
+  return await PingRepository.getSome(limit, skip);
+};
+
 const getAll = () => PingRepository.getAll();
 
 const getById = async (id) => {
@@ -24,8 +32,10 @@ const removeById = (id) => PingRepository.removeById(id);
 
 export const PingService = {
   add,
+  count,
   getAll,
-  getById,
   update,
+  getSome,
+  getById,
   removeById,
 };

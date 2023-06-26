@@ -34,7 +34,7 @@ const PingComponent = ({ id, message, timestamp, pings, setPings }) => {
   };
 
   return (
-    <div className="w-3/4 h-24 border-black border-b-2 flex justify-between items-center">
+    <div className="w-full h-24 border-black border-b-2 flex justify-between items-center">
       <div className="flex flex-col gap-2">
         <p>{message}</p>
         <p>{TimeHelper.toUTCTime(timestamp)}</p>
