@@ -50,25 +50,33 @@ jobs:
               uses: actions/checkout@v3
               with:
                 ref: main
-            - name: Build images
-              run: |
-                docker build \
-                --cache-from ${{ env.IMAGE }}:latest \
-                --tag ${{ env.HEROKU_REGISTRY_IMAGE }}:latest \
-                --file Dockerfile \
-                --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
-                "."
+
             - name: Log in to the Heroku Container Registry
               run: docker login -u _ -p ${HEROKU_AUTH_TOKEN} registry.heroku.com
               env:
                 HEROKU_AUTH_TOKEN: ${{ secrets.HEROKU_AUTH_TOKEN }}
+
+            - name: Pull images
+              run: docker pull ${{ env.HEROKU_REGISTRY_IMAGE }}:latest || true
+
+            - name: Build images
+              run: |
+                docker build \
+                --cache-from ${{ env.HEROKU_REGISTRY_IMAGE }}:latest \
+                --tag ${{ env.HEROKU_REGISTRY_IMAGE }}:latest \
+                --file Dockerfile \
+                --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
+                "."
+
             - name: Push to the registry
               run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
+
             - name: Set environment variables
               run: |
                 echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
                 echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
                 echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME }}" >> $GITHUB_ENV
+
             - name: Release
               run: |
                 chmod +x ./release.sh
