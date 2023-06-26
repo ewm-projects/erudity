@@ -2,35 +2,36 @@ import { TimeHelper } from "../../utils/timeHelper";
 import { PingService } from "./PingService";
 
 const PingComponent = ({ id, message, timestamp, pings, setPings }) => {
-
   const onClickUpdateHandler = async () => {
     try {
-      const newMessage = prompt(`Enter new ping message`)
+      const newMessage = prompt(`Enter new ping message`);
 
-      if(newMessage) {
-        const currentPing = pings.find(ping => ping.id == id)
-        currentPing.message = newMessage
-        const res = await PingService.update(id, currentPing)
-        const updatedPing = res.data
-        setPings(pings.map(ping => ping.id != updatedPing.id ? ping: updatedPing))
+      if (newMessage) {
+        const currentPing = pings.find((ping) => ping.id == id);
+        currentPing.message = newMessage;
+        const res = await PingService.update(id, currentPing);
+        const updatedPing = res.data;
+        setPings(
+          pings.map((ping) => (ping.id != updatedPing.id ? ping : updatedPing))
+        );
       }
     } catch (e) {
-      console.error("Error in ping update handler")
-      throw e
+      console.error("Error in ping update handler");
+      throw e;
     }
-  }
+  };
 
   const onClickDeleteHandler = async () => {
-    if(confirm(`Delete ping?`)) {
+    if (confirm(`Delete ping?`)) {
       try {
-        await PingService.remove(id)
-        setPings(pings.filter(ping => ping.id != id))
+        await PingService.remove(id);
+        setPings(pings.filter((ping) => ping.id != id));
       } catch (e) {
-        console.error("Error in ping delete handler")
-        throw e
+        console.error("Error in ping delete handler");
+        throw e;
       }
     }
-  }
+  };
 
   return (
     <div className="w-3/4 h-24 border-black border-b-2 flex justify-between items-center">
@@ -39,8 +40,12 @@ const PingComponent = ({ id, message, timestamp, pings, setPings }) => {
         <p>{TimeHelper.toUTCTime(timestamp)}</p>
       </div>
       <div className="flex gap-2">
-        <button className="btn" onClick={onClickUpdateHandler}>Update</button>
-        <button className="btn" onClick={onClickDeleteHandler}>Delete</button>
+        <button className="btn" onClick={onClickUpdateHandler}>
+          Update
+        </button>
+        <button className="btn" onClick={onClickDeleteHandler}>
+          Delete
+        </button>
       </div>
     </div>
   );

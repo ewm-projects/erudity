@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { tutorialsList } from '../utils/constants';
+import React from "react";
+import { Link } from "react-router-dom";
+import { tutorialsList } from "../utils/constants";
 
 function Navbar() {
   return (
@@ -15,7 +15,7 @@ function Navbar() {
         </Link>
         <div className="dropdown dropdown-hover">
           <label tabIndex={0} className="btn btn-ghost m-1">
-            Programming{' '}
+            Programming{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

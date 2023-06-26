@@ -22,7 +22,16 @@ const PingPage = () => {
     ) : (
       pings
         .sort((firstPing, nextPing) => nextPing.date - firstPing.date)
-        .map((ping) => <PingComponent key={ping.id} id={ping.id} message={ping.message} timestamp={ping.date} pings={pings} setPings={setPings} />)
+        .map((ping) => (
+          <PingComponent
+            key={ping.id}
+            id={ping.id}
+            message={ping.message}
+            timestamp={ping.date}
+            pings={pings}
+            setPings={setPings}
+          />
+        ))
     );
 
   return (
@@ -31,7 +40,7 @@ const PingPage = () => {
       <div className="w-3/4 my-8">
         <AddPingComponent pings={pings} setPings={setPings} />
         <div className="flex flex-col justify-start items-center gap-2 mt-8">
-          { displayPings }
+          {displayPings}
         </div>
       </div>
     </div>

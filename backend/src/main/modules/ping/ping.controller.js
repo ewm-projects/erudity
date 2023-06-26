@@ -22,21 +22,21 @@ router.post("/", async (req, res) => {
 });
 
 // update ping message
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   const dto = {
     message: req.body.message,
-    date: Date.now()
-  }
+    date: Date.now(),
+  };
 
-  const updatedPing = await PingService.update(req.params.id, dto)
+  const updatedPing = await PingService.update(req.params.id, dto);
 
-  res.status(201).json(updatedPing)
-})
+  res.status(201).json(updatedPing);
+});
 
 // delete individual ping message
-router.delete('/:id', async (req, res) => {
-  await PingService.removeById(req.params.id)
-  res.status(204).end()
-})
+router.delete("/:id", async (req, res) => {
+  await PingService.removeById(req.params.id);
+  res.status(204).end();
+});
 
 export { router as PingRouter };

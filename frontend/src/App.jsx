@@ -1,9 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './pages/Landing';
-import AboutPage from './pages/About';
-import NotFoundPage from './pages/NotFound';
-import PingPage from './pages/Ping';
-import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/Landing";
+import AboutPage from "./pages/About";
+import NotFoundPage from "./pages/NotFound";
+import PingPage from "./pages/Ping";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
