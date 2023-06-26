@@ -56,15 +56,15 @@ const PingPage = () => {
 
   const currentPaginatedItems = () => {
     if (totalCount) {
-      const start = (1 + page * LIMIT) - (LIMIT)
-      const end = totalCount > page * LIMIT ? page * LIMIT : totalCount
-      
-      return `Showing ${start} - ${end} out of ${totalCount}`
+      const start = 1 + page * LIMIT - LIMIT;
+      const end = totalCount > page * LIMIT ? page * LIMIT : totalCount;
+
+      return `Showing ${start} - ${end} out of ${totalCount}`;
     }
 
-    return `Showing 0 - 0 out of 0`
-  }
-  
+    return `Showing 0 - 0 out of 0`;
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-start items-center bg-slate-200 pt-16">
       <h1 className="text-4xl bold">Pings</h1>

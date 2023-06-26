@@ -13,8 +13,8 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const page = req.query.page;
   const limit = req.query.limit;
-  
-  if(page && limit) {
+
+  if (page && limit) {
     const skip = (page - 1) * limit; // page - 1 to prevent skipping items on first page
     const results = await PingService.getSome(limit, skip);
     const count = await PingService.count();
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     const payload = {
       count,
       pages,
-      results
+      results,
     };
 
     res.status(200).json(payload);
@@ -32,8 +32,8 @@ router.get("/", async (req, res) => {
     const payload = {
       count: results.length,
       pages: 1,
-      results
-    }
+      results,
+    };
     res.status(200).json(payload);
   }
 });
