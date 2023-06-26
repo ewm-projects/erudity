@@ -3,27 +3,40 @@ import supertest from "supertest";
 import Conn from "../../../main/data/conn";
 import Express from "../../../main/http/app";
 
-import { PingData } from "./ping.data.js";
+import { generatePings } from "./ping.data";
 import { PingRepository } from "../../../main/modules/ping";
 
 const Api = supertest(Express.create());
+const PING_DATA = generatePings(20)
 
 beforeAll(async () => await Conn.start());
 
 describe("Get Pings", () => {
   beforeAll(async () => await PingRepository.removeAll());
 
-  test("Success - get all pings", async () => {
-    // Arrange
-    await PingRepository.addAll(PingData);
+  test("Success - get first 5 paginated pings", async () => {
+    await PingRepository.addAll(PING_DATA);
+    const params = {
+      page: 1,
+      limit:5
+    }
+    const expected = {
+      "count": PING_DATA.length,
+      "pages": Math.ceil(PING_DATA.length / params.limit),
+      "results": PING_DATA.slice(0, 6)
+    }
 
-    // Act
-    const res = await Api.get("/api/ping").expect(200);
-    const pings = res.body;
+    const res = await Api.get("/api/pings").query(params).expect(200);
+    const data = res.body;
 
-    // Assert
-    pings.forEach((ping) => expect(ping.id).toBeDefined());
-    expect(pings).toHaveLength(PingData.length);
+    expect(data).toHaveProperty('count', expected.count)
+    expect(data).toHaveProperty('pages', expected.pages)
+    expect(data).toHaveProperty('results')
+    expect(data.results).toHaveLength(params.limit)
+
+    for(let i = 0; i<params.limit; i++) {
+      expect(data.results[i].message).toBe(PING_DATA[i].message)
+    }
   });
 });
 
@@ -32,7 +45,7 @@ describe("Create Pings", () => {
     const newPing = { message: "new ping" };
 
     // /application\/json/ is regexp, see https://javascript.info/regexp-introduction
-    await Api.post("/api/ping")
+    await Api.post("/api/pings")
       .send(newPing)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -50,7 +63,7 @@ describe("Update Pings", () => {
     const newPing = { message: "new ping" };
     const savedPing = await PingRepository.add(ping);
 
-    await Api.put(`/api/ping/${savedPing.id}`)
+    await Api.put(`/api/pings/${savedPing.id}`)
       .send(newPing)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -62,7 +75,7 @@ describe("Delete Pings", () => {
     const ping = { message: "ping" };
     const savedPing = await PingRepository.add(ping);
 
-    await Api.delete(`/api/ping/${savedPing.id}`).expect(204);
+    await Api.delete(`/api/pings/${savedPing.id}`).expect(204);
     const pings = await PingRepository.getAll();
 
     expect(pings).toHaveLength(0);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "/api/ping";
+const baseUrl = "/api/pings";
 
 const get = async (page, limit) => {
   try {

@@ -23,7 +23,7 @@ router.get("/api/health", async (req, res) => {
   res.status(200).json(health);
 });
 
-router.use("/api/ping", PingRouter);
+router.use("/api/pings", PingRouter);
 router.use("/api/resources", ResourceRouter);
 
 const setupSwagger = () => {

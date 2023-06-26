@@ -13,14 +13,14 @@ const PingPage = () => {
 
   useEffect(() => {
     const fetchPong = async () => {
-      const { total, pages, pings } = await PingService.get(page, LIMIT);
-      setPings(pings);
+      const { count, pages, results } = await PingService.get(page, LIMIT);
+      setPings(results);
       setPageCount(pages);
-      setTotalCount(total);
+      setTotalCount(count);
     };
 
     fetchPong();
-  }, [page]);
+  }, [pings, page]);
 
   const displayPings =
     pings.length == 0 ? (
@@ -45,9 +45,6 @@ const PingPage = () => {
       if (p == 1) return p;
       return p - 1;
     });
-    console.log("page", page);
-    console.log("start", Math.max(Math.ceil(page - 1 * LIMIT), 1));
-    console.log("lower", Math.ceil(page - 1 * LIMIT));
   };
 
   const onClickNextPageHandler = () => {
@@ -55,11 +52,19 @@ const PingPage = () => {
       if (p == pageCount) return p;
       return p + 1;
     });
-    console.log("page", page);
-    console.log("start", Math.max(Math.ceil(page - 1 * LIMIT), 1));
-    console.log("lower", Math.ceil(page - 1 * LIMIT));
   };
 
+  const currentPaginatedItems = () => {
+    if (totalCount) {
+      const start = (1 + page * LIMIT) - (LIMIT)
+      const end = totalCount > page * LIMIT ? page * LIMIT : totalCount
+      
+      return `Showing ${start} - ${end} out of ${totalCount}`
+    }
+
+    return `Showing 0 - 0 out of 0`
+  }
+  
   return (
     <div className="w-full min-h-screen flex flex-col justify-start items-center bg-slate-200 pt-16">
       <h1 className="text-4xl bold">Pings</h1>
@@ -67,11 +72,7 @@ const PingPage = () => {
         <AddPingComponent pings={pings} setPings={setPings} />
         <div className="flex flex-col justify-start items-center gap-2 mt-8">
           {displayPings}
-          <p className="self-end">
-            Showing {page * LIMIT - LIMIT + 1}-
-            {totalCount > page * LIMIT ? page * LIMIT : totalCount} out of{" "}
-            {totalCount}
-          </p>
+          <p className="self-end">{currentPaginatedItems()}</p>
         </div>
         <div className="flex justify-center items-center gap-4 mt-8">
           <button
