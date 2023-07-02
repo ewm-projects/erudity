@@ -85,3 +85,24 @@ jobs:
               run: |
                 chmod +x ./release.sh
                 ./release.sh
+
+    deploy-image:
+      name: Deploy to Heroku
+      runs-on: ubuntu-latest
+      needs: [build-image]
+      env:
+        HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+      steps:
+        - name: Push to the registry
+          run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
+
+        - name: Set environment variables
+          run: |
+            echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
+            echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
+            echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME }}" >> $GITHUB_ENV
+
+        - name: Release
+          run: |
+            chmod +x ./release.sh
+            ./release.sh
