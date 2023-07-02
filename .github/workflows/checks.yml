@@ -8,6 +8,9 @@ jobs:
     backend-checks:
         name: Backend CI
         runs-on: ubuntu-latest
+        env:
+            NODE_OPTIONS: --experimental-vm-modules
+            NODE_ENV: test
         steps:
             - uses: actions/checkout@v3
             - name: Set up Node 18
@@ -17,6 +20,7 @@ jobs:
               with:
                 node-version: 18
             - run: |
+                set -o pipefail
                 cd backend
                 npm ci
                 npm run lint:check
