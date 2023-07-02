@@ -6,7 +6,7 @@ on:
 
 jobs:
     backend-checks:
-      name: Backend CI
+      name: Backend Checks
       runs-on: ubuntu-latest
       env:
           NODE_OPTIONS: --experimental-vm-modules
@@ -28,7 +28,7 @@ jobs:
               npm run test
 
     frontend-checks:
-        name: Frontend CI
+        name: Frontend Checks
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
                 npm run test
 
     build-image:
-        name: Build Production Docker image
+        name: Build image
         runs-on: ubuntu-latest
         needs: [backend-checks, frontend-checks]
         env: 
@@ -72,20 +72,6 @@ jobs:
                 --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
                 "."
 
-            - name: Push to the registry
-              run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
-
-            - name: Set environment variables
-              run: |
-                echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
-                echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
-                echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME }}" >> $GITHUB_ENV
-
-            - name: Release
-              run: |
-                chmod +x ./release.sh
-                ./release.sh
-
     deploy-image:
       name: Deploy to Heroku
       runs-on: ubuntu-latest
@@ -93,6 +79,14 @@ jobs:
       env:
         HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
       steps:
+        - name: Log in to the Heroku Container Registry
+          run: docker login -u _ -p ${HEROKU_AUTH_TOKEN} registry.heroku.com
+          env:
+            HEROKU_AUTH_TOKEN: ${{ secrets.HEROKU_AUTH_TOKEN }}
+
+        - name: Pull images
+          run: docker pull ${{ env.HEROKU_REGISTRY_IMAGE }}:latest || true
+
         - name: Push to the registry
           run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
 
