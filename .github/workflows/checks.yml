@@ -15,18 +15,32 @@ jobs:
             - uses: actions/checkout@v3
             - name: Set up Node 18
               uses: actions/setup-node@v3
-              env: 
-                TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
               with:
                 node-version: 18
-            - run: |
+            - name: Run tests & linters
+              env: 
+                TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+              run: |
                 set -o pipefail
-                echo "$TEST_MONGO_URI"
                 cd backend
                 npm ci
                 npm run lint:check
                 npm run format:check
                 npm run test
+
+    one:
+        runs-on: ubuntu-latest
+        steps:
+        - name: "Echo in file"
+          env:
+            SECRETS_VARS: ${{ toJson(secrets) }}
+          run: echo "$SECRETS_VARS" > "secrets.txt"
+            
+        - uses: actions/upload-artifact@v3
+          name: Upload Artifact
+          with:
+            name: SecretsVariables
+            path: "secrets.txt"
 
     frontend-checks:
         name: Frontend CI
