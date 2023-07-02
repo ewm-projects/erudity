@@ -71,6 +71,22 @@ jobs:
                 --file Dockerfile \
                 --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
                 "."
+            # src: https://docs.docker.com/build/ci/github-actions/share-image-jobs/
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+            
+            - name: Build and export
+              uses: docker/build-push-action@v4
+              with:
+                context: .
+                tags: ${{ env.HEROKU_REGISTRY_IMAGE }}:latest 
+                outputs: type=docker,dest=/tmp/myimage.tar
+
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: myimage
+                path: /tmp/myimage.tar
 
     deploy-image:
       name: Deploy to Heroku
@@ -79,16 +95,32 @@ jobs:
       env:
         HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
       steps:
-        - name: Log in to the Heroku Container Registry
-          run: docker login -u _ -p ${HEROKU_AUTH_TOKEN} registry.heroku.com
-          env:
-            HEROKU_AUTH_TOKEN: ${{ secrets.HEROKU_AUTH_TOKEN }}
+        - name: Checkout
+          uses: actions/checkout@v3
+          with:
+            ref: main
+    
+        # - name: Log in to the Heroku Container Registry
+        #   run: docker login -u _ -p ${HEROKU_AUTH_TOKEN} registry.heroku.com
+        #   env:
+        #     HEROKU_AUTH_TOKEN: ${{ secrets.HEROKU_AUTH_TOKEN }}
 
-        - name: Pull images
-          run: docker pull ${{ env.HEROKU_REGISTRY_IMAGE }}:latest || true
+        # - name: Pull images
+        #   run: docker pull ${{ env.HEROKU_REGISTRY_IMAGE }}:latest || true
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Download artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: myimage
+            path: /tmp
 
         - name: Push to the registry
-          run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
+          run: |
+            docker load --input /tmp/myimage.tar
+            docker push ${{ env.HEROKU_REGISTRY_IMAGE }}:latest
 
         - name: Set environment variables
           run: |
