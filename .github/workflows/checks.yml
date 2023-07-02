@@ -21,12 +21,12 @@ jobs:
                 node-version: 18
             - run: |
                 set -o pipefail
+                echo "$TEST_MONGO_URI"
                 cd backend
                 npm ci
                 npm run lint:check
                 npm run format:check
                 npm run test
-              shell: bash
 
     frontend-checks:
         name: Frontend CI
