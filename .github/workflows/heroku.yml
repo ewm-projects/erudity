@@ -6,7 +6,7 @@ on:
 
 jobs:
     build-image:
-        name: Build Production Docker image
+        name: Build & Deploy
         runs-on: ubuntu-latest
         env: 
             HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
