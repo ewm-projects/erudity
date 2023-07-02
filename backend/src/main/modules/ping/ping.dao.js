@@ -7,4 +7,4 @@ const pingSchema = new Schema({
   date: Date,
 });
 
-export const PingModel = MongoUtils.modelFactory("Ping", pingSchema);
+export const PingDao = MongoUtils.modelFactory("Ping", pingSchema);

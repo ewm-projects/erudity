@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-#root {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-}
+@layer base {
+    body {
+      @apply h-screen;
+    }
+  
+    #root {
+      @apply h-full;
+    }
+  }

@@ -6,25 +6,136 @@ info:
   version: 1.0.0
 tags:
   - name: resources
-    # description: API operations for many resources
-  - name: resource
-    # description: API operations for one resource
+    description: Represents learning materials
+  - name: pings
+    description: Represents simple message
 paths:
+  /pings:
+    get:
+      tags:
+        - pings
+      summary: Get all pings
+      description: Retrieves all pings and does not paginate the results
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Paginated'
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Ping'
+    post:
+      tags:
+        - pings
+      summary: Create new ping
+      description: Adds new ping
+      requestBody:
+        description: Requires a message
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PingDTO'
+        required: true
+      responses:
+        '201':
+          description: Successful ping creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ping'
+  /pings/{id}:
+    put:
+      tags:
+        - pings
+      summary: Update single ping
+      description: Update single ping
+      parameters:
+        - name: id
+          in: path
+          description: ObjectID of resource
+          required: true
+          schema:
+            type: string
+            format: ObjectID
+      responses:
+        '200':
+          description: Single ping updated & returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ping'
+    delete:
+      tags:
+        - pings
+      summary: Delete single ping
+      description: Delete single ping
+      parameters:
+        - name: id
+          in: path
+          description: ObjectID of ping
+          required: true
+          schema:
+            type: string
+            format: ObjectID
+      responses:
+        '204':
+          description: Single ping sucessfully deleted
+        '404':
+          description: Ping not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Ping not found'
   /resources:
     get:
       tags: 
         - resources
       summary: Get list of resources
       description: View all resources
+      # src: https://stackoverflow.com/a/55135302
+      parameters:
+        - name: page
+          in: query
+          description: Page (subset) of resources to return
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Number of resources to include in a page
+          required: false
+          schema:
+            type: integer
       responses:
         '200':    # status code
-          description: A JSON array of resources
+          description: A JSON array of paginated resources
           content:
             application/json:
-              schema: 
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Resource'
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Paginated'
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Resource'
     post:
       tags:
         - resources
@@ -54,7 +165,7 @@ paths:
   /resources/{resourceId}:
     get:
       tags: 
-        - resource
+        - resources
       summary: Get data for specific resource
       description: View single resource
       parameters:
@@ -74,7 +185,7 @@ paths:
                 $ref: '#/components/schemas/Resource'
     put:
       tags:
-        - resource
+        - resources
       summary: Update single resource
       description: Update single resource
       parameters:
@@ -100,8 +211,8 @@ paths:
                 type: string
                 example: 'Invalid Id or data'
     delete:
-      tags: 
-        - resource
+      tags:
+        - resources
       summary: Delete single resource
       description: Delete single resource
       parameters:
@@ -124,6 +235,34 @@ paths:
                 example: 'Resource not found'
 components:
   schemas:
+    # src: https://blog.nitzano.com/generic-swagger-pagination
+    Paginated:
+      type: object
+      properties:
+        count:
+          type: number
+        pages:
+          type: number
+        results:
+          type: array
+          items: {}
+    PingDTO:
+      type: object
+      properties:
+        message:
+          type: string
+        date:
+          type: string
+          format: date-time
+    Ping:
+      allOf:
+        - $ref: '#/components/schemas/PingDTO'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "507f1f77bcf86cd799439011"
+              
     ResourceDTO:
       type: object
       properties:
