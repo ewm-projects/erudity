@@ -22,8 +22,6 @@ jobs:
                 TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
                 SOME_ENV: "some env yo"
               run: |
-                set -o pipefail
-                echo "$SOME_ENV"
                 cd backend
                 npm ci
                 npm run lint:check
