@@ -6,22 +6,26 @@ on:
 
 jobs:
     backend-checks:
-        name: Backend CI
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - name: Set up Node 18
-              uses: actions/setup-node@v3
-              env: 
-                TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
-              with:
-                node-version: 18
-            - run: |
-                cd backend
-                npm ci
-                npm run lint:check
-                npm run format:check
-                npm run test
+      name: Backend CI
+      runs-on: ubuntu-latest
+      env:
+          NODE_OPTIONS: --experimental-vm-modules
+          NODE_ENV: test
+      steps:
+          - uses: actions/checkout@v3
+          - name: Set up Node 18
+            uses: actions/setup-node@v3
+            with:
+              node-version: 18
+          - name: Run tests & linters
+            env: 
+              TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+            run: |
+              cd backend
+              npm ci
+              npm run lint:check
+              npm run format:check
+              npm run test
 
     frontend-checks:
         name: Frontend CI
