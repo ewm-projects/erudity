@@ -104,7 +104,7 @@ export const generateResources =  (amount) => {
             tags: Utility.generateRandomItems(tags, tags.length)
         }
 
-        data.push(resource)
+        data.push(new ResourceModel(resource))
     }
     return data
 }
