@@ -16,31 +16,32 @@ const getDirPath = (dirName) => {
 };
 
 // src: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-const getRandomInt = (max) => Math.floor(Math.random() * max)
-const getRandomFromArray = (arr) => arr[getRandomInt(arr.length)]
-const getRandomIntBetween = (min, max) => Math.floor(Math.random() * (max + 1)) + min
+const getRandomInt = (max) => Math.floor(Math.random() * max);
+const getRandomFromArray = (arr) => arr[getRandomInt(arr.length)];
+const getRandomIntBetween = (min, max) =>
+  Math.floor(Math.random() * (max + 1)) + min;
 const getRandomDate = (start) => {
-  const min = start ?? new Date(2000, 0, 1)
-  const max = Date.now()
-  return new Date(+min + Math.random() * (max-min))
-}
+  const min = start ?? new Date(2000, 0, 1);
+  const max = Date.now();
+  return new Date(+min + Math.random() * (max - min));
+};
 
 const generateRandomItems = (arr, amount) => {
-  const limit = Utility.getRandomIntBetween(1, amount)
-  const items = new Set()
+  const limit = Utility.getRandomIntBetween(1, amount);
+  const items = new Set();
 
-  for(let i = 0; i < limit; i++) {
-      let item = ""
+  for (let i = 0; i < limit; i++) {
+    let item = "";
 
-      do {
-          item = Utility.getRandomFromArray(arr)
-      } while(items.has(item))
+    do {
+      item = Utility.getRandomFromArray(arr);
+    } while (items.has(item));
 
-      items.add(item)
+    items.add(item);
   }
 
-  return Array.from(items)
-}
+  return Array.from(items);
+};
 
 const Utility = {
   getDirPath,

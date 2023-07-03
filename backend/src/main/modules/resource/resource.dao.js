@@ -30,7 +30,4 @@ const resourceSchema = new Schema({
   tags: [String],
 });
 
-export const ResourceDao = MongoUtils.modelFactory(
-  "Resource",
-  resourceSchema
-);
+export const ResourceDao = MongoUtils.modelFactory("Resource", resourceSchema);
