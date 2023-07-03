@@ -30,10 +30,6 @@ beforeAll(async () => await Conn.start());
 
 test("placeholder test", async () => {
   const res = await Api.get("/api/health").expect(200);
-  // eslint-disable-next-line guard-for-in
-  const x = RESOURCE_DATA.map((r) => r.valueOf());
-  console.log("x", x);
-  // console.log(RESOURCE_DATA[0].valueOf())
   expect(RESOURCE_DATA).toBeDefined();
   expect(res.body).toHaveProperty("status");
   expect(res.body).toHaveProperty("uptime");
