@@ -11,7 +11,7 @@ const main = async () => {
   try {
     Logger.info(await Conn.start());
     Logger.info(await Express.start());
-    // throw new Error("Test error!")
+    // throw new Error("Test error! I am a test!")
   } catch (e) {
     Logger.error("Failed to start application");
     throw e;
