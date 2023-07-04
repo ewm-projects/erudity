@@ -6,6 +6,10 @@ const add = (dto) => {
   return ResourceRepository.add(dto);
 };
 
+const count = () => ResourceRepository.count();
+
+const getSome = (limit, skip) => ResourceRepository.getSome(limit, skip);
+
 const getAll = () => ResourceRepository.getAll();
 
 const getById = async (id) => {
@@ -24,8 +28,10 @@ const removeById = (id) => ResourceRepository.removeById(id);
 
 export const ResourceService = {
   add,
-  getAll,
-  getById,
+  count,
   update,
+  getAll,
+  getSome,
+  getById,
   removeById,
 };

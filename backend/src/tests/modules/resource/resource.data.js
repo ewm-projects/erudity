@@ -85,7 +85,7 @@ export const generateResources = (amount) => {
       totalRatings: Utility.getRandomIntBetween(1, 1000),
       hours: (Math.random() * 23).toFixed(2),
       pages: (Math.random() * 1000).toFixed(2),
-      tags: Utility.generateRandomItems(tags, tags.length),
+      tags: Utility.generateRandomItems(tags, tags.length - 1),
     };
 
     data.push(new ResourceModel(resource));

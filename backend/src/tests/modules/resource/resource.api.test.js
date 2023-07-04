@@ -7,7 +7,7 @@ import { generateResources } from "./resource.data";
 import { ResourceRepository } from "../../../main/modules/resource";
 
 const Api = supertest(Express.create());
-const RESOURCE_DATA = generateResources(3);
+const RESOURCE_DATA = generateResources(20);
 // Resource example
 // {
 //     creators: [ 'Charlie', 'Sierra', 'Quebec' ],
@@ -28,13 +28,38 @@ const RESOURCE_DATA = generateResources(3);
 
 beforeAll(async () => await Conn.start());
 
-test("placeholder test", async () => {
-  const res = await Api.get("/api/health").expect(200);
-  expect(RESOURCE_DATA).toBeDefined();
-  expect(res.body).toHaveProperty("status");
-  expect(res.body).toHaveProperty("uptime");
-  expect(res.body).toHaveProperty("db");
-  expect(res.body).toHaveProperty("date");
+describe("Get Resources", () => {
+  beforeAll(async () => await ResourceRepository.removeAll());
+
+  test("Success - get first 5 paginated resources", async () => {
+    await ResourceRepository.addAll(RESOURCE_DATA);
+    const params = {
+      page: 1,
+      limit: 5,
+    };
+
+    const expected = {
+      count: RESOURCE_DATA.length,
+      pages: Math.ceil(RESOURCE_DATA.length / params.limit),
+      results: RESOURCE_DATA.slice(0, 6),
+    };
+
+    const res = await Api.get("/api/resources").query(params).expect(200);
+    const data = res.body;
+
+    // console.log("Data", data)
+
+    expect(data).toHaveProperty("count", expected.count);
+    expect(data).toHaveProperty("pages", expected.pages);
+    expect(data).toHaveProperty("results");
+    expect(data.results).toHaveLength(params.limit);
+
+    for (let i = 0; i < params.limit; i++) {
+      expect(data.results[i].description).toBe(
+        RESOURCE_DATA[i].valueOf().description
+      );
+    }
+  });
 });
 
 afterEach(async () => await ResourceRepository.removeAll());
