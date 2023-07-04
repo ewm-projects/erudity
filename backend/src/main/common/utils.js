@@ -26,6 +26,7 @@ const getRandomDate = (start) => {
   return new Date(+min + Math.random() * (max - min));
 };
 
+// amount should be atleast 1 less than arr.length, or else function will hang
 const generateRandomItems = (arr, amount) => {
   const limit = Utility.getRandomIntBetween(1, amount);
   const items = new Set();

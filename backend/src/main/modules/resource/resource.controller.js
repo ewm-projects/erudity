@@ -4,12 +4,32 @@ import { ResourceService } from "./resource.service.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const resources = await ResourceService.getAll();
-  if (resources.length === 0) {
-    res.status(200).json({ message: "sorry, nuthin yet" });
-    return;
+  const page = req.query.page;
+  const limit = req.query.limit;
+  let payload = {};
+
+  if (page && limit) {
+    const skip = (page - 1) * limit;
+    const results = await ResourceService.getSome(limit, skip);
+    const count = await ResourceService.count();
+    const pages = Math.ceil(count / limit);
+
+    payload = {
+      count,
+      pages,
+      results,
+    };
+  } else {
+    const results = await ResourceService.getAll();
+
+    payload = {
+      count: results.length,
+      pages: 1,
+      results,
+    };
   }
-  res.status(200).json(resources);
+
+  res.status(200).json(payload);
 });
 
 export { router as ResourceRouter };
