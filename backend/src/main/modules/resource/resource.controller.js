@@ -1,5 +1,6 @@
 import express from "express";
 import { ResourceService } from "./resource.service.js";
+import { ResourceModel } from "./resource.model.js";
 
 const router = express.Router();
 
@@ -30,6 +31,13 @@ router.get("/", async (req, res) => {
   }
 
   res.status(200).json(payload);
+});
+
+router.post("/", async (req, res) => {
+  const dto = new ResourceModel(req.body);
+  const newResource = await ResourceService.add(dto);
+
+  res.status(201).json(newResource);
 });
 
 export { router as ResourceRouter };
