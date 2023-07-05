@@ -62,5 +62,23 @@ describe("Get Resources", () => {
   });
 });
 
+describe("Create Resources", () => {
+  beforeAll(async () => await ResourceRepository.removeAll());
+
+  test("Success - add new resource", async () => {
+    const newResource = generateResources(1)[0].valueOf();
+
+    const res = await Api.post("/api/resources")
+      .send(newResource)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const resources = await ResourceRepository.getAll();
+
+    expect(resources).toHaveLength(1);
+    expect(res.body.description).toBe(newResource.description);
+  });
+});
+
 afterEach(async () => await ResourceRepository.removeAll());
 afterAll(async () => await Conn.stop());
