@@ -40,6 +40,14 @@ router.post("/", async (req, res) => {
   res.status(201).json(newResource);
 });
 
+router.put("/:id", async (req, res) => {
+  const dto = new ResourceModel(req.body);
+
+  const updatedResource = await ResourceService.update(req.params.id, dto);
+
+  res.status(201).json(updatedResource);
+});
+
 router.delete("/:id", async (req, res) => {
   await ResourceService.removeById(req.params.id);
   res.status(204).end();
