@@ -82,15 +82,15 @@ describe("Create Resources", () => {
 
 describe("Delete Resources", () => {
   test("Success - resource is deleted", async () => {
-    const resource = RESOURCE_DATA[0]
-    const savedResource = await ResourceRepository.add(resource)
+    const resource = RESOURCE_DATA[0];
+    const savedResource = await ResourceRepository.add(resource);
 
-    await Api.delete(`/api/resources/${savedResource.id}`).expect(204)
-    const resources = await ResourceRepository.getAll()
+    await Api.delete(`/api/resources/${savedResource.id}`).expect(204);
+    const resources = await ResourceRepository.getAll();
 
-    expect(resources).toHaveLength(0)
-  })
-})
+    expect(resources).toHaveLength(0);
+  });
+});
 
 afterEach(async () => await ResourceRepository.removeAll());
 afterAll(async () => await Conn.stop());

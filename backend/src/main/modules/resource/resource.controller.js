@@ -40,9 +40,9 @@ router.post("/", async (req, res) => {
   res.status(201).json(newResource);
 });
 
-router.delete("/:id", async (req,res) => {
-  await ResourceService.removeById(req.params.id)
-  res.status(204).end()
-})
+router.delete("/:id", async (req, res) => {
+  await ResourceService.removeById(req.params.id);
+  res.status(204).end();
+});
 
 export { router as ResourceRouter };
