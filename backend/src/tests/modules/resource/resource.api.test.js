@@ -80,9 +80,28 @@ describe("Create Resources", () => {
   });
 });
 
+describe("Update Resources", () => {
+  beforeAll(async () => await ResourceRepository.removeAll());
+
+  test("Success - resource is modified", async () => {
+    const resource = RESOURCE_DATA[0].valueOf();
+    const updatedResource = RESOURCE_DATA[1].valueOf();
+    const savedResource = await ResourceRepository.add(resource);
+
+    const res = await Api.put(`/api/resources/${savedResource.id}`)
+      .send(updatedResource)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+    const resources = await ResourceRepository.getAll();
+
+    expect(resources).toHaveLength(1);
+    expect(res.body.description).toBe(updatedResource.description);
+  });
+});
+
 describe("Delete Resources", () => {
   test("Success - resource is deleted", async () => {
-    const resource = RESOURCE_DATA[0];
+    const resource = generateResources(1)[0].valueOf();
     const savedResource = await ResourceRepository.add(resource);
 
     await Api.delete(`/api/resources/${savedResource.id}`).expect(204);
