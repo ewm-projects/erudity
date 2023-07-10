@@ -4,6 +4,7 @@ import AboutPage from "./pages/About";
 import NotFoundPage from "./pages/NotFound";
 import PingPage from "./pages/Ping";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/ping" element={<PingPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }
