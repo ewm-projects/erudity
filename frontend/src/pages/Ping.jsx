@@ -66,7 +66,7 @@ const PingPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-start items-center bg-slate-200 pt-16">
+    <div className="w-full h-full flex flex-col justify-start items-center bg-slate-200 pt-16">
       <h1 className="text-4xl bold">Pings</h1>
       <div className="w-3/4 my-8">
         <AddPingComponent pings={pings} setPings={setPings} />
